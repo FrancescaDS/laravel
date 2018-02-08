@@ -55,14 +55,47 @@ Route::get('/users',function(){
     return User::all();
 });
 
-Route::get('/albums','AlbumsController@index');
-Route::delete('/albums/{id}','AlbumsController@delete');
-Route::get('/albums/{id}','AlbumsController@show');
-Route::get('/albums/{id}/edit','AlbumsController@edit');
-Route::post('/albums/{id}','AlbumsController@store');
+Route::get('/home','AlbumsController@index')->name('albums');
 
+Route::get('/albums','AlbumsController@index')->name('albums');
+Route::get('/albums/{id}','AlbumsController@show')->where('id','[0-9]+');
+Route::get('/albums/create','AlbumsController@create')->name('album.create');
+Route::get('/albums/{id}/edit','AlbumsController@edit');
+Route::delete('/albums/{album}','AlbumsController@delete')
+->where('album', '[0-9]+');
+Route::post('/albums','AlbumsController@save')->name('album.save');
+
+//Route::post('/albums/{id}','AlbumsController@store');
+Route::patch('/albums/{id}','AlbumsController@store');
+Route::get('/albums/{album}/images','AlbumsController@getImages')
+    ->name('album.getimages')
+    ->where('album', '[0-9]+');
 
 
 Route::get('/photos',function(){
     return Photo::all();
 });
+
+Route ::get('usernoalbums', function(){
+    $usersnoalbum = DB::table('users as u')
+
+        ->select('u.id','email','name')
+        ->whereRaw('NOT EXISTS (SELECT user_id from albums where user_id=u.id)')
+
+       // ->leftJoin('albums as a', 'u.id','a.user_id')
+        //->whereNull('album_name')
+        //->whereRaw('album_name is null')
+        //->select('u.id','email','name','album_name')
+        ->get();
+    return $usersnoalbum;
+});
+
+//images
+Route::resource('photos', 'PhotosController');
+Auth::routes();
+
+//questa rotta e' stata inserita da Laravel con auth
+//va alla pagina di welcome dopo la registrazione
+//noi l'abbiamo commentata per farlo andare alla home gia' presente
+//vedi rotta piu' in alto. che e' le'enco degli album
+//Route::get('/home', 'HomeController@index')->name('home');

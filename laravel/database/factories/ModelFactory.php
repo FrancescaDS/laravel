@@ -17,6 +17,23 @@ use Faker\Generator as Faker;
 |
 */
 
+
+$cats = ['abstract',
+    'animals',
+    'business',
+    'cats',
+    'city',
+    'food',
+    'nightlife',
+    'fashion',
+    'people',
+    'nature',
+    'sports',
+    'technics',
+    'transport'];
+
+
+
 $factory->define(App\User::class, function (Faker $faker) {
     static $password;
 
@@ -28,32 +45,20 @@ $factory->define(App\User::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(App\Models\Album::class, function (Faker $faker) {
+$factory->define(App\Models\Album::class, function (Faker $faker)  use($cats) {
     return [
         'album_name' => $faker->name,
         'description' => $faker->text(128),
         //'user_id' => User::first()->id
-        'user_id' => User::inRandomOrder()->first()->id
+        'user_id' => User::inRandomOrder()->first()->id,
+        'album_thumb' => $faker->imageUrl(640,480,$faker->randomElement($cats))
     ];
 });
 
-$factory->define(App\Models\Photo::class, function (Faker $faker) {
-    $cats = ['abstract',
-        'animals',
-        'business',
-        'cats',
-        'city',
-        'food',
-        'nightlife',
-        'fashion',
-        'people',
-        'nature',
-        'sports',
-        'technics',
-        'transport'];
-
+$factory->define(App\Models\Photo::class, function (Faker $faker)  use($cats) {
     return [
-        'album_id' => Album::inRandomOrder()->first()->id,
+        //'album_id' => Album::inRandomOrder()->first()->id,
+        'album_id' => 1,
         'name' => $faker->text(64),
         'description' => $faker->text(128),
         'image_path' => $faker->imageUrl(640,480,$faker->randomElement($cats))

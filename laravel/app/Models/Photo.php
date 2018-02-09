@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Album;
+use App\User;
 
 class Photo extends Model
 {
-
-    /*public function album(){
-        return $this->belongsTo(Album::class);
-    }*/
-
     //ritorna la relazione tra la foto e l'album
     public function album(){
         //non serve indicare le chiavi perche' sono di default

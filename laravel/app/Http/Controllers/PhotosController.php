@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Auth;
 use App\Models\Photo;
 use App\Models\Album;
 use Storage;
@@ -11,17 +12,22 @@ use Storage;
 class PhotosController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+       // $this->authorizeResource(Photo::class);
+    }
+
     protected $rules = [
-        'album_id' => 'required|digit|exists:albums',
-        'name' => 'required|unique:photos:name',
-        'description' => 'required',
+        'album_id' => 'required|integer|exists:albums,id',
+        'name' => 'required',
+        'description' => 'nullable|min:3',
         'image_path' => 'required|image'
     ];
 
     protected $errorMessages = [
         'album_id.required' => 'Select an Album',
         'name.required' => 'Insert a name',
-        'name.unique' => 'This name is already present',
         'description.required' => 'Insert a description',
         'image_path.required' => 'Insert an image file',
         'image_path.image' => 'Format file non correct: insert an image file'
@@ -42,8 +48,8 @@ class PhotosController extends Controller
     {
         $id = $req->has('album_id')?$req->input('album_id'):null;
         $album = Album::firstOrNew(['id' => $id]);
-        $albums = $this->getAlbums();
         $photo = new Photo();
+        $albums = $this->getAlbums();
         return view('images.editimage', compact('album','albums','photo'));
     }
 
@@ -100,13 +106,14 @@ class PhotosController extends Controller
      */
     public function update(Request $request, Photo $photo)
     {
+        unset($this->rules['image_path']);
         $this->validate($request, $this->rules, $this->errorMessages);
         $this->processFile($photo);
         $photo->album_id = $request->album_id;
         $photo->name = $request->input('name');
         $photo->description = $request->input('description');
         $res = $photo->save();
-        $messaggio = $res ? 'Photo '.$photo->name.' aggiornata' : 'Photp '.$photo->name.' NON aggiornata';
+        $messaggio = $res ? 'Photo '.$photo->name.' aggiornata' : 'Photo '.$photo->name.' NON aggiornata';
         session()->flash('message', $messaggio);
         return redirect()->route('album.getimages', $photo->album_id);
 

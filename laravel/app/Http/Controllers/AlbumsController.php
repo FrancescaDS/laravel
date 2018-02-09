@@ -2,18 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Http\Requests\AlbumRequest;
+use App\Http\Requests\AlbumUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Album;
 use App\Models\Photo;
+use App\User;
 use DB;
 use Storage;
 
 class AlbumsController extends Controller
 {
+
+    public function __construct()
+    {
+        //$this->middleware('auth')->only(['create']);
+        //$this->middleware('auth')->except(['index']);
+
+    }
+
     public function index(Request $request)
     {
         $queryBuilder = Album::orderBy('id','desc')->withCount('photos');
+        $queryBuilder->where('user_id', Auth::user()->id);
         if($request->has('id')){
             $queryBuilder->where('id',$request->get('id'));
         }
@@ -29,6 +41,8 @@ class AlbumsController extends Controller
         //$res = $album->delete();
 
         //$res = $album = Album::find($id)->delete();
+
+        $this->authorize('delete', $album);
 
         $thumbNail = $album->album_thumb;
         $disk = config('filesystem.default');
@@ -48,14 +62,34 @@ class AlbumsController extends Controller
 
     public function edit($id){
         $album = Album::find($id);
+
+        //altro modo per autorizzare
+       // Auth::user()->can('update',$album);
+
+        $this->authorize('update', $album);
+
+
+        /*if(\Gate::denies('manage-album', $album)){
+            abort(401, 'Unauthorized');
+        }*/
+
+        /* if($album->user->id !== Auth::user()->id){
+            abort(401, 'Unauthorized');
+        }*/
+
         return view('albums.editalbum')->with('album',$album);
     }
 
-    public function store($id, AlbumRequest $req){
+    public function store($id, AlbumUpdateRequest $req){
         $album = Album::find($id);
+
+        /*if(\Gate::denies('manage-album', $album)){
+            abort(401, 'Unauthorized');
+        }*/
+
         $album->album_name = request()->input('name');
         $album->description = request()->input('description');
-        $album->user_id = 1;
+        $album->user_id =  request()->user()->id;
         $this->processFile($id, $req, $album);
         $res = $album->save();
         $messaggio = $res ? 'Album '.$id.' aggiornato' : 'Album '.$id.' NON aggiornato';
@@ -68,12 +102,12 @@ class AlbumsController extends Controller
         return view('albums.createalbum', ['album' => $album]);
     }
 
-    public function save(AlbumUpdateRequest $request){
+    public function save(AlbumRequest $request){
         $name = $request->input('name');
         $album = new Album();
         $album->album_name = $name;
         $album->description = $request->input('description');
-        $album->user_id = 1;
+        $album->user_id = $request->user()->id;
         $res = $album->save();
         if($res){
             if($this->processFile($album->id, $request, $album)){
@@ -108,6 +142,11 @@ class AlbumsController extends Controller
     }
 
     public function getImages(Album $album){
+
+        if(\Gate::denies('manage-album', $album)){
+            abort(401, 'Unauthorized');
+        }
+
         //con il metodo GET le ritorna tutte
         //$images = Photo::where('album_id', $album->id)->get();
 

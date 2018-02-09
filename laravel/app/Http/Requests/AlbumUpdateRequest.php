@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Album;
 
 class AlbumUpdateRequest extends FormRequest
 {
@@ -13,6 +15,10 @@ class AlbumUpdateRequest extends FormRequest
      */
     public function authorize()
     {
+        $album = Album::find($this->id);
+        if(\Gate::denies('manage-album', $album)){
+            return false;
+        }
         return true;
     }
 
@@ -25,6 +31,7 @@ class AlbumUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'name' => Rule::unique('albums','album_name')->ignore($this->id,'id'),
             'description' => 'required'
         ];
     }

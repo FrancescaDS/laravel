@@ -25,6 +25,7 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        @if(Auth::check())
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
@@ -54,11 +55,12 @@
           <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
+        @endif
 
         <!-- Right Side Of Navbar -->
         <ul class="nav navbar-nav navbar-right">
           <!-- Authentication Links -->
-          @guest
+          @if (Auth::guest())
             <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
             <li><a class="nav-link" href="{{ route('register') }}">Register</a></li>
           @else
@@ -86,7 +88,7 @@
                 </li>
               </ul>
             </li>
-          @endguest
+          @endif
         </ul>
 
       </div>

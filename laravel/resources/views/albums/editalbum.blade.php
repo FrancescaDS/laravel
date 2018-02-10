@@ -2,7 +2,7 @@
 @section('content')
     <h1>EDIT ALBUM</h1>
     @include('partials.inputerrors')
-    <form action="/albums/{{$album->id}}" method="POST" enctype="multipart/form-data">
+    <form action="{{route('album.patch', $album->id)}}" method="POST" enctype="multipart/form-data">
         {{csrf_field()}}
         <input type="hidden" name="_method" value="PATCH">
         <div class="form-group">

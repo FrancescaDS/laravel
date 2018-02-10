@@ -15,7 +15,7 @@ class PhotosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-       // $this->authorizeResource(Photo::class);
+       //$this->authorizeResource(Photo::class);
     }
 
     protected $rules = [
@@ -164,6 +164,8 @@ class PhotosController extends Controller
     }
 
     public function getAlbums(){
-        return Album::orderBy('album_name')->get();
+        return Album::orderBy('album_name')
+            ->where('user_id', Auth::user()->id)
+            ->get();
     }
 }

@@ -55,7 +55,11 @@ Route::get('/users',function(){
     return User::all();
 });
 
-Route::group(['middleware'=>'auth'],
+Route::group(
+    [
+        'middleware' => 'auth',
+        'prefix' => 'dashboard'
+    ],
     function(){
         Route::get('/', 'AlbumsController@index')
             ->name('albums');
@@ -66,8 +70,10 @@ Route::group(['middleware'=>'auth'],
         Route::get('/albums','AlbumsController@index')
             ->name('albums');
 
-        Route::get('/albums/{id}','AlbumsController@show')
-            ->where('id','[0-9]+');
+        //si vede con questa URL http://laravel.local/albums/12 (12 e' id album)
+        Route::get('/albums/{album}', 'AlbumsController@show')
+            ->where('id', '[0-9]+')
+            ->middleware('can:view,album');
 
         Route::get('/albums/{id}/edit','AlbumsController@edit')
             ->where('id','[0-9]+')

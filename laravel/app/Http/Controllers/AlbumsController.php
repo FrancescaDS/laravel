@@ -25,7 +25,7 @@ class AlbumsController extends Controller
     public function index(Request $request)
     {
         $queryBuilder = Album::orderBy('id','desc')->withCount('photos');
-        $queryBuilder->where('user_id', Auth::user()->id);
+       // $queryBuilder->where('user_id', Auth::user()->id);
         if($request->has('id')){
             $queryBuilder->where('id',$request->get('id'));
         }
@@ -55,10 +55,10 @@ class AlbumsController extends Controller
         return ''.$res;
     }
 
-    public function show($id){
+    /*public function show($id){
         $sql = 'SELECT * FROM albums WHERE id= :id';
         return DB::select($sql, ['id' => $id]);
-    }
+    }*/
 
     public function edit($id){
         $album = Album::find($id);
@@ -158,5 +158,9 @@ class AlbumsController extends Controller
         return view('images.albumimages', compact('album', 'images'));
     }
 
+    public function  show( Album $album){
+        echo 'show';
+        dd($album);
+    }
 
 }

@@ -33,4 +33,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Album::class);
     }
+
+    public function getFullNameAttribute()
+    {
+        //se ci fosse anche il cognome si potrebbe concatenare qui
+        return $this->name;
+    }
 }

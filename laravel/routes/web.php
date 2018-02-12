@@ -130,6 +130,8 @@ Route::group(
 
         Route::get('album/{album}/images', 'GalleryController@showAlbumImages')
             ->name('gallery.album.images');
+        Route::get('album/category/{category}', 'GalleryController@showAlbumsByCategory')
+            ->name('gallery.album.category');
     }
 );
 

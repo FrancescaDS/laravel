@@ -20,24 +20,21 @@
         </thead>
            @foreach($albums as $album)
                 <tr>
-                    <td>({{$album->id}}) {{$album->album_name}}</td>
+                    <td>({{$album->id}}) {{$album->album_name}} ({{$album->photos_count}} photos)</td>
                     <td>
                         @if ($album->album_thumb)
                             <img src="{{asset($album->path)}}" width="120" alt="{{$album->album_name}}" title="{{$album->album_name}}" />
                         @endif
-
                     </td>
                     <td>{{$album->user->fullname}}</td>
-                    <td>{{$album->created_at}}</td>
+                    <td>{{$album->created_at->format('d/m/Y')}}</td>
                     <td>
+                        <a title="Add photo" href="{{route('photos.create')}}?album_id={{$album->id}}" class="btn btn-success"><span class="fa fa-plus-square-o"></span></a>
                         @if ($album->photos_count)
-                            <a href="/albums/{{$album->id}}/images" class="btn btn-primary">VIEW IMAGES ({{$album->photos_count}})</a>
+                            <a title="View photos" href="{{route('album.getimages',$album->id)}}" class="btn btn-default"><span class="fa fa-search"></span></a><br>
                         @endif
-                        <a href="{{route('photos.create')}}?album_id={{$album->id}}" class="btn btn-primary">NEW IMAGE</a>
-
-                                <a href="{{route('album.edit', $album->id)}}" class="btn btn-primary">UPDATE</a>
-                            <a href="{{route('album.delete', $album->id)}}" class="btn btn-danger">DELETE</a>
-
+                        <a title="Update album" href="{{route('album.edit', $album->id)}}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                         <a title="Delete album" href="{{route('album.delete', $album->id)}}" class="btn btn-danger"><span class="fa fa-minus"></span></a>
                     </td>
                 </tr>
             @endforeach

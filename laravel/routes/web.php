@@ -117,6 +117,24 @@ Route::group(
     });
 
 
+//Gallery routes
+Route::group(
+    [
+       'prefix' => 'gallery'
+    ],
+    function(){
+        Route::get('albums', 'GalleryController@index')
+            ->name('gallery.albums');
+        Route::get('/', 'GalleryController@index')
+            ->name('gallery.albums');
+
+        Route::get('album/{album}/images', 'GalleryController@showAlbumImages')
+            ->name('gallery.album.images');
+    }
+);
+
+
+
 //Route::get('/albums','AlbumsController@index')->name('albums')
 //->middleware('auth');
 
@@ -127,3 +145,4 @@ Auth::routes();
 //noi l'abbiamo commentata per farlo andare alla home gia' presente
 //vedi rotta piu' in alto. che e' le'enco degli album
 //Route::get('/home', 'HomeController@index')->name('home');
+

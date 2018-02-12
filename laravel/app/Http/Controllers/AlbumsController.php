@@ -25,7 +25,7 @@ class AlbumsController extends Controller
     public function index(Request $request)
     {
         $queryBuilder = Album::orderBy('id','desc')->withCount('photos');
-       // $queryBuilder->where('user_id', Auth::user()->id);
+        $queryBuilder->where('user_id', Auth::user()->id);
         if($request->has('id')){
             $queryBuilder->where('id',$request->get('id'));
         }

@@ -6,7 +6,7 @@
             {{session()->get('message')}}
         @endcomponent
     @endif
-<table class="table table-bordered">
+    <table class="table table-striped">
     <tr>
         <th>CREATED DATE</th>
         <th>TITLE</th>
@@ -16,13 +16,13 @@
     @forelse($images as $image)
         <tr>
 
-            <td>{{$image->created_at}}</td>
+            <td>{{$image->created_at->format('d/m/Y H:m')}}</td>
             <td>{{$image->name}}</td>
-            <td>{{$album->album_name}}</td>
+            <td><a href="{{route('album.edit',$image->album_id)}}">{{$album->album_name}}</a></td>
             <td><img width="120" src="{{asset($image->image_path)}}" /></td>
             <td>
-                <a title="Edit pic" href="{{route('photos.edit',$image->id)}}" class="btn btn-sm btn-primary"></a>
-                <a title="Delete pic" href="{{route('photos.destroy',$image->id)}}" class="btn btn-sm btn-danger"></a>
+                <a title="Update photo" href="{{route('photos.edit',$image->id)}}" class="btn btn-sm btn-primary"><span class="fa fa-pencil"></span></a>
+                <a title="Delete photo" href="{{route('photos.destroy',$image->id)}}" class="btn btn-sm btn-danger"><span class="fa fa-minus"></span></a>
             </td>
         </tr>
     @empty

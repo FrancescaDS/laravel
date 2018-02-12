@@ -1,4 +1,9 @@
 body{
     padding-top:70px;
 }
-
+ul.pagination{
+    margin: 0 auto;
+}
+button{
+    cursor: pointer;
+}

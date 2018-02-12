@@ -40,6 +40,10 @@ class Album extends Model
         //la relazione contraria e' belongsTo
     }
 
+    public function categories(){
+        return $this->belongsToMany(AlbumCategory::class,'album_category','album_id', 'category_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

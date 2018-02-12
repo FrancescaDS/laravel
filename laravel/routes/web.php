@@ -133,8 +133,6 @@ Route::group(
     }
 );
 
-
-
 //Route::get('/albums','AlbumsController@index')->name('albums')
 //->middleware('auth');
 
@@ -145,4 +143,12 @@ Auth::routes();
 //noi l'abbiamo commentata per farlo andare alla home gia' presente
 //vedi rotta piu' in alto. che e' le'enco degli album
 //Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/', 'GalleryController@index');
+Route::get('/home', 'GalleryController@index');
+
+//rotta di prova per verifica categorie
+//con resource automaticamente si creano tutte le rotte corrispondenti
+//da Terminal --php artisan route:list
+Route::resource('categories','AlbumCategoryController');
 

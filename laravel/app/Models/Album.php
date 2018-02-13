@@ -41,7 +41,8 @@ class Album extends Model
     }
 
     public function categories(){
-        return $this->belongsToMany(AlbumCategory::class,'album_category','album_id', 'category_id');
+        return $this->belongsToMany(AlbumCategory::class,'album_category','album_id', 'category_id')
+            ->withTimestamps();
     }
 
     public function user()

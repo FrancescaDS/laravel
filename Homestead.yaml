@@ -9,11 +9,17 @@ folders:
       to: /home/vagrant/Code
 
 sites:
-    - map: homestead.app
+    - map: homestead.local
       to: /home/vagrant/Code/Project/public
+    - map: test.local
+      to: /home/vagrant/Code/test/public
+    - map: laravel.local
+      to: /home/vagrant/Code/laravel/public
 
 databases:
     - homestead
+    - laraproject
+    - laravel
 
 variables:
     - key: APP_ENV

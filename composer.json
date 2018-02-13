@@ -25,5 +25,8 @@
     },
     "bin": [
         "homestead"
-    ]
+    ],
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.4"
+    }
 }

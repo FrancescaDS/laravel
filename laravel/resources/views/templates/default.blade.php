@@ -22,6 +22,7 @@
           <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand" href="/">IMG GALLERY</a>
+      <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav mr-auto">
@@ -34,6 +35,9 @@
                   </li>
                   <li class="nav-item">
                       <a class="nav-link " href="{{route('photos.create')}}">New Image</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link " href="{{route('categories.index')}}">Categories</a>
                   </li>
               @endif
           </ul>

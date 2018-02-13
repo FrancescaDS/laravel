@@ -7,6 +7,8 @@ use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\AlbumUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Album;
+use App\Models\AlbumCategory;
+use App\Models\AlbumsCategory;
 use App\Models\Photo;
 use App\User;
 use DB;
@@ -24,7 +26,7 @@ class AlbumsController extends Controller
 
     public function index(Request $request)
     {
-        $queryBuilder = Album::orderBy('id','desc')->withCount('photos');
+        $queryBuilder = Album::orderBy('id','desc')->withCount('photos')->with('categories');
         $queryBuilder->where('user_id', Auth::user()->id);
         if($request->has('id')){
             $queryBuilder->where('id',$request->get('id'));
@@ -77,7 +79,15 @@ class AlbumsController extends Controller
             abort(401, 'Unauthorized');
         }*/
 
-        return view('albums.editalbum')->with('album',$album);
+        $selectedCategories = $album->categories->pluck('id')->toArray();
+        $categories = AlbumCategory::get();
+        return view('albums.editalbum')
+            ->with(
+                [
+                    'album'=>$album,
+                    'categories'=>$categories,
+                    'selectedCategories'=>$selectedCategories
+                ]);
     }
 
     public function store($id, AlbumUpdateRequest $req){
@@ -92,6 +102,9 @@ class AlbumsController extends Controller
         $album->user_id =  request()->user()->id;
         $this->processFile($id, $req, $album);
         $res = $album->save();
+        //il metodo sync sincronizza le relazioni molti a molti
+        //album-categorie
+        $album->categories()->sync($req->categories);
         $messaggio = $res ? 'Album '.$id.' aggiornato' : 'Album '.$id.' NON aggiornato';
         session()->flash('message', $messaggio);
         return redirect()->route('albums');
@@ -99,17 +112,33 @@ class AlbumsController extends Controller
 
     public function create(){
         $album = new Album();
-        return view('albums.createalbum', ['album' => $album]);
+
+        $categories = AlbumCategory::get();
+        $selectedCategories=[];
+        return view('albums.createalbum',
+            [
+                'album' => $album,
+                'categories' => $categories,
+                'selectedCategories' => $selectedCategories
+            ]);
     }
 
     public function save(AlbumRequest $request){
-        $name = $request->input('name');
+
         $album = new Album();
+        $name = $request->input('name');
         $album->album_name = $name;
+        $album->album_thumb = '';
         $album->description = $request->input('description');
         $album->user_id = $request->user()->id;
         $res = $album->save();
+
         if($res){
+            if($request->has('categories')){
+                //il metodo attach inserisce le relazioni molti a molti
+                //album-categorie
+                $album->categories()->attach($request->categories);
+            }
             if($this->processFile($album->id, $request, $album)){
                 $album->save();
             }

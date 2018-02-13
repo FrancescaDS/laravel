@@ -25,7 +25,7 @@ class AlbumRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:albums,album_name',
-            'description' => 'required',
+           // 'description' => 'required',
             'album_thumb' => 'required|image'
             //'user_id' => 'required|digit|exists:users'
     ];
@@ -35,7 +35,7 @@ class AlbumRequest extends FormRequest
         return [
             'name.required' => 'Insert a name',
             'name.unique' => 'This name is already present',
-            'description.required' => 'Insert a description',
+          //  'description.required' => 'Insert a description',
             'album_thumb.required' => 'Insert an image file',
             'album_thumb.image' => 'Format file non correct: insert an image file'
 

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Album;
+use App\Models\AlbumCategory;
 
 class User extends Authenticatable
 {
@@ -38,5 +39,10 @@ class User extends Authenticatable
     {
         //se ci fosse anche il cognome si potrebbe concatenare qui
         return $this->name;
+    }
+
+    public function albumCategories()
+    {
+        return $this->hasMany(AlbumCategory::class);
     }
 }

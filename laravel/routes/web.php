@@ -111,8 +111,14 @@ Route::group(
             return $usersnoalbum;
         });
 
+        //con resource automaticamente si creano tutte le rotte corrispondenti
+        //da Terminal --php artisan route:list
         //images
         Route::resource('photos', 'PhotosController');
+
+        //con resource automaticamente si creano tutte le rotte corrispondenti
+        //da Terminal --php artisan route:list
+        Route::resource('categories','AlbumCategoryController');
 
     });
 
@@ -149,8 +155,4 @@ Auth::routes();
 Route::get('/', 'GalleryController@index');
 Route::get('/home', 'GalleryController@index');
 
-//rotta di prova per verifica categorie
-//con resource automaticamente si creano tutte le rotte corrispondenti
-//da Terminal --php artisan route:list
-Route::resource('categories','AlbumCategoryController');
 

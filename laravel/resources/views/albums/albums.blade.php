@@ -14,6 +14,7 @@
                 <th>Album name</th>
                 <th>Thumb</th>
                 <th>Creator</th>
+                <th>Categories</th>
                 <th>Created date</th>
                 <th>&nbsp;</th>
             </tr>
@@ -27,6 +28,17 @@
                         @endif
                     </td>
                     <td>{{$album->user->fullname}}</td>
+                    <td>
+                        @if($album->categories)
+                            <ul>
+                            @foreach($album->categories as $category)
+                                <li>{{$category->category_name}} ({{$category->id}})</li>
+                            @endforeach
+                            </ul>
+                        @else
+                            No categories bound
+                        @endif
+                    </td>
                     <td>{{$album->created_at->format('d/m/Y')}}</td>
                     <td>
                         <a title="Add photo" href="{{route('photos.create')}}?album_id={{$album->id}}" class="btn btn-success"><span class="fa fa-plus-square-o"></span></a>

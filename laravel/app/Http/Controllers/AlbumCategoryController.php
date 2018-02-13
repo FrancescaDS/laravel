@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumCategoryRequest;
 use Illuminate\Http\Request;
-use App\Models\Album;
 use App\Models\AlbumCategory;
-use App\Models\AlbumsCategory;
+use Auth;
 
 class AlbumCategoryController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +17,21 @@ class AlbumCategoryController extends Controller
      */
     public function index()
     {
-        return AlbumCategory::with('albums')->get();
+        /*$categories = AlbumCategory::where('user_id', Auth::id())
+            ->withCount('albums')
+            ->latest()->paginate(5);*/
+
+        /*$categories = Auth::user()
+            ->albumCategories()
+            ->withCount('albums')
+            ->latest()
+            ->paginate(5);*/
+
+        $categories = AlbumCategory::getCategoriesByUserId(auth()->user())
+            ->paginate(5);
+
+        $category = new AlbumCategory();
+        return view('categories.index', compact('categories', 'category'));
     }
 
     /**
@@ -26,7 +41,8 @@ class AlbumCategoryController extends Controller
      */
     public function create()
     {
-        //
+        $category = new AlbumCategory();
+        return view('categories.managecategory', compact('category'));
     }
 
     /**
@@ -35,9 +51,13 @@ class AlbumCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlbumCategoryRequest $request)
     {
-        //
+        $category = new AlbumCategory();
+        $category->category_name = $request->category_name;
+        $category->user_id = Auth::id();
+        $category->save();
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -59,7 +79,7 @@ class AlbumCategoryController extends Controller
      */
     public function edit(AlbumCategory $category)
     {
-//
+        return view('categories.managecategory', compact('category'));
     }
 
     /**
@@ -69,9 +89,11 @@ class AlbumCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, AlbumCategory $category)
     {
-        //
+        $category->category_name = $request->category_name;
+        $res =  $category->save();
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -80,8 +102,9 @@ class AlbumCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(AlbumCategory $category)
     {
-        //
+        $res = $category->delete();
+        return redirect()->route('categories.index');
     }
 }

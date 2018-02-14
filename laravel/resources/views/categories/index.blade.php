@@ -14,7 +14,7 @@
                 <th>&nbsp;</th>
             </tr>
             @forelse($categories as $categoryI)
-                <tr>
+                <tr id="tr-{{$categoryI->id}}">
                     <td>{{$categoryI->id}}</td>
                     <td>{{$categoryI->category_name}}</td>
                     <td>{{$categoryI->created_at->format('d/m/Y')}}</td>
@@ -23,8 +23,8 @@
                         <form method="post" action="{{route('categories.destroy',$categoryI->id)}}" class="form-inline">
                             {{method_field('DELETE')}}
                             {{csrf_field()}}
-                            <button class="btn btn-danger" title="Delete category"><span class="fa fa-minus"></span></button>&nbsp;
-                            <a href="{{route('categories.edit', $categoryI->id)}}" class="btn btn-primary" title="Update categpry"><span class="fa fa-pencil"></span></a>
+                            <button id="btnDelete-{{$categoryI->id}}" class="btn btn-danger" title="Delete category"><span class="fa fa-minus"></span></button>&nbsp;
+                            <a id="btnUpdate-{{$categoryI->id}}" href="{{route('categories.edit', $categoryI->id)}}" class="btn btn-primary" title="Update categpry"><span class="fa fa-pencil"></span></a>
                         </form>
 
                     </td>
@@ -49,4 +49,33 @@
         </div>
 
     </div>
+@endsection
+@section('footer')
+    @parent
+    <script>
+        $('document').ready(function(){
+            $('form .btn-danger').on('click', function(evt){
+                evt.preventDefault(); //blocca l'azione naturale della chiamata al form
+                //this e' il pulsante
+                var f = this.parentNode; //parent e' il form
+                var urlCategory = f.action;
+                var categoryId = this.id.replace('btnDelete-','')*1;
+                var trId = 'tr-'+categoryId;
+                $.ajax(
+                    urlCategory,
+                    {
+                        method : 'DELETE',
+                        data : {
+                            '_token' : Laravel.csrfToken
+                        },
+                        complete : function (resp) {
+                            var resp = JSON.parse(resp.responseText);
+                            alert(resp.message);
+                            $('#'+trId).remove().fadeOut(1000);
+                        }
+                    }
+                );
+            });
+        });
+    </script>
 @endsection

@@ -6,6 +6,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <script>
+        window.Laravel = {!! json_encode([
+        'csrfToken' => csrf_token(),
+        ]) !!};
+    </script>
+
     <title>@yield('title','Home')</title>
 
       <link href="/css/bootstrap.min.css" rel="stylesheet">

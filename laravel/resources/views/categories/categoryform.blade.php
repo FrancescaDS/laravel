@@ -1,6 +1,6 @@
 <div class="row">
 <div class="col-md-10 mt-2">
-    <form action="{{$category->category_name?route('categories.update', $category->id): route('categories.store')}}" method="POST"  class="form-inline">
+    <form id="manageCategoryForm" action="{{$category->category_name?route('categories.update', $category->id): route('categories.store')}}" method="POST"  class="form-inline">
     {{csrf_field()}}
     {{$category->category_name? method_field('PATCH'):''}}
     <div class="form-group">

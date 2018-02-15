@@ -56,8 +56,18 @@ class AlbumCategoryController extends Controller
         $category = new AlbumCategory();
         $category->category_name = $request->category_name;
         $category->user_id = Auth::id();
-        $category->save();
-        return redirect()->route('categories.index');
+        $res = $category->save();
+        //controllo se la chiamata al delete viene da ajax con expectJson()
+        if($request->expectsJson()){
+            return [
+                'message' => $res ? 'New category created' : 'Could not create new category',
+                'success' => (bool)$res,
+                'data' => @$category
+            ];
+        }else{
+            return redirect()->route('categories.index');
+        }
+
     }
 
     /**
@@ -93,7 +103,17 @@ class AlbumCategoryController extends Controller
     {
         $category->category_name = $request->category_name;
         $res =  $category->save();
-        return redirect()->route('categories.index');
+        //controllo se la chiamata al delete viene da ajax con expectJson()
+        if($request->expectsJson()){
+            return [
+                'message' => $res ? 'Category updated' : 'Could not update category',
+                'success' => (bool)$res,
+                'data' => @$category
+            ];
+        }else{
+            return redirect()->route('categories.index');
+        }
+
     }
 
     /**

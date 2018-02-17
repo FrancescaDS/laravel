@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Photo;
-use App\User;
+use App\Models\User;
 
 class Album extends Model
 {

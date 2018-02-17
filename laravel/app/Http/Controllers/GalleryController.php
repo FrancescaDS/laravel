@@ -6,7 +6,7 @@ use App\Models\AlbumCategory;
 use Illuminate\Http\Request;
 use App\Models\Album;
 use App\Models\Photo;
-use App\User;
+use App\Models\User;
 
 class GalleryController extends Controller
 {

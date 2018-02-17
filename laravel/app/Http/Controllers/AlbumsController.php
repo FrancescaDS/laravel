@@ -10,7 +10,7 @@ use App\Models\Album;
 use App\Models\AlbumCategory;
 use App\Models\AlbumsCategory;
 use App\Models\Photo;
-use App\User;
+use App\Models\User;
 use DB;
 use Storage;
 

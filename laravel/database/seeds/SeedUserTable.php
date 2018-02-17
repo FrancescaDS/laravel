@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use App\User;
+use App\Models\User;
 
 class SeedUserTable extends Seeder
 {
@@ -14,7 +14,7 @@ class SeedUserTable extends Seeder
     public function run()
     {
         //chiamo la factory per popolare la tabella invece di farlo direttamente qui
-        factory(App\User::class, 30)->create();
+        factory(App\Models\User::class, 30)->create();
 
         /* $sql = 'INSERT INTO users (name, email, password, created_at)
 values (:name, :email, :password, :created_at)';

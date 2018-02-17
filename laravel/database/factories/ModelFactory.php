@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use App\Models\Album;
 use App\Models\Photo;
-use App\User;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 /*
@@ -34,7 +34,7 @@ $cats = ['abstract',
 
 
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Models\User::class, function (Faker $faker) {
     static $password;
 
     return [

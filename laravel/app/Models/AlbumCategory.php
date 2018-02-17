@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Album;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 

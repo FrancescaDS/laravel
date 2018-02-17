@@ -12,7 +12,7 @@
 |
 */
 
-use App\User;
+use App\Models\User;
 use App\Models\Album;
 use App\Models\Photo;
 

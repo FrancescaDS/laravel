@@ -22,6 +22,17 @@ class User extends Authenticatable
         'name', 'email', 'password','role'
     ];
 
+    //indica che questi campi devono essere date (tipo carbon)
+    // e qundi applicabili i formati
+    //se no li vede come stringhe
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    protected $dateFormat = 'Y-m-d H:i:s';
+
     /**
      * The attributes that should be hidden for arrays.
      *

@@ -15,6 +15,8 @@
 use App\Models\User;
 use App\Models\Album;
 use App\Models\Photo;
+use App\Mail\TestEmail;
+use App\Mail\TestMd;
 
 Route::get('/','HomeController@index');
 
@@ -170,3 +172,25 @@ Route::get('/', 'GalleryController@index');
 });*/
 //piu' semplice
 Route::redirect('home','/');
+
+//test per invio email
+//Route::view('testmail','mails.testemail', ['username'=>'Francesca']);
+
+/*Route::get('testmail',function(){
+    \Mail::to('francesca.dallaserra@gmail.com')
+        ->send(new TestEmail());
+});*/
+
+/*Route::get('testmail',function(){
+    \Mail::send(new TestEmail(Auth::user()));
+});*/
+
+Route::get('testmail',function(){
+    //passo l'utnte loggato
+    //$user = Auth::user();
+    //passo un utente del DB
+    $user = User::get()->first();
+    \Mail::to('francesca.dallaserra@gmail.com')
+      //->send(new TestEmail($user));
+      ->send(new TestMd($user));
+});

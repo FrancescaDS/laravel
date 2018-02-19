@@ -18,7 +18,13 @@ use App\Models\Photo;
 
 Route::get('/','HomeController@index');
 
+Route::get('allalbums', function(){
+    //return Album::get();
+    $albums = Album::get();
+    $albums->dump();
+    $albums->pluck('album_name')->dd();
 
+});
 
 //Route::get('/', function () {
     //return view('welcome'); //prints the page
@@ -152,7 +158,15 @@ Auth::routes();
 //vedi rotta piu' in alto. che e' le'enco degli album
 //Route::get('/home', 'HomeController@index')->name('home');
 
+
 Route::get('/', 'GalleryController@index');
-Route::get('/home', 'GalleryController@index');
 
-
+//cosi' chiamando 'home' resta home sulla url ma la pagina e' la stessa di '/'
+//perche' chiama lo stesso metodo index del controlle GalleryController
+/*Route::get('/home', 'GalleryController@index');*/
+//cosi' chiamando 'home' nella url lo toglie
+/*Route::get('home', function(){
+   return redirect('/');
+});*/
+//piu' semplice
+Route::redirect('home','/');

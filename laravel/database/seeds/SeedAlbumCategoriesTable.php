@@ -27,6 +27,10 @@ class SeedAlbumCategoriesTable extends Seeder
             'transport'
         ];
         foreach ($cats as $cat) {
+
+            //factory(App\Models\AlbumCategory::class,5)->create();
+
+
             AlbumCategory::create(
                 ['category_name' => $cat]
             );

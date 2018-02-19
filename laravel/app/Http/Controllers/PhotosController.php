@@ -61,6 +61,11 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
+       //questa validazione funziona solo se tutti i campi sono da validare
+        //$picData = $request->validate($this->rules, $this->errorMessages);
+        //dd($picData);
+        //Photo::create($picData);
+
         $this->validate($request, $this->rules, $this->errorMessages);
 
         $photo = new Photo();
